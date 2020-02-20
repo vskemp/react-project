@@ -1,0 +1,22 @@
+body {
+    box-sizing: border-box;
+}
+
+.statements {
+    display: flex;
+    justify-content: center;
+}
+
+.head {
+    display: flex;
+    justify-content: center;
+    border: solid black;
+    font-size: 30px;
+    font-family: cursive;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
