@@ -1,17 +1,15 @@
 
 import React, { Component } from "react";
 import cookie from "react-cookies";
-
-
 import { googleTranslate } from "./utils/googleTranslate";
 
 class ApiApp extends Component {
     state = {
         languageCodes: [],
         language: cookie.load("language") ? cookie.load("language") : "en",
-        question: cookie.load("question")
+        question: cookie.load("What language would you like the page in?")
             ? cookie.load("question")
-            : "What language do you prefer to read with?"
+            : "What language would you like the page in?",
     };
 
     componentDidMount() {
@@ -77,7 +75,7 @@ class ApiApp extends Component {
     divStyle = {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
         height: "100vh",
         width: "100wh"
     };
