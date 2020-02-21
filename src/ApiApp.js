@@ -16,56 +16,11 @@ class Header extends React.Component {
         );
     }
 }
-
-class UserInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: '' };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
-
-    handleSubmit(event) {
-        alert('A translation was submitted: ' + this.state.value);
-        event.preventDefault();
-    }
-
-    render() {
-        return (
-            <form>
-                <label>
-                    Translate: 
-                    <input type="text" placeholder="Enter English" />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
-        )
-    };
-}
-
 class Statement1 extends React.Component {
     render() {
         return (
             <div className="statement1">
-                <h2>Common Sample Phrases:</h2>
-                        {/* <li>What is your name?</li>
-                        <li>How are you?</li>
-                        <li>Where is the bathroom?</li>
-                        <li>Can you give me directions to...?</li>
-                        <li>Thank you</li>
-                        <li>Please</li>
-                        <li>I am sorry</li>
-                        <li>I do not understand</li>
-                        <li>Goodbye</li>
-                        <li>Can I have...?</li>
-                        <li>How much does it cost?</li>
-                        <li>Yes</li>
-                        <li>No</li> */}
+                <h2>Common Phrases:</h2>
             </div>
         );
     }
@@ -82,8 +37,55 @@ class Hello extends React.Component {
     }
 }
 
-class YourName extends 
+class YourName extends  React.Component {
+    render() {
+        return (
+            <div className="your-name">
+                <li>What is your name?</li>
+            </div>
+        );
+    }
+}
 
+class HowAre extends React.Component {
+    render() {
+        return (
+            <div className="well">
+                <li>How are you?</li>
+            </div>
+        );
+    }
+}
+
+class Bathroom extends React.Component {
+    render() {
+        return (
+            <div className="bathroom">
+                <li>Where is the bathroom?</li>
+            </div>
+        );
+    }
+}
+
+class Thank extends React.Component {
+    render() {
+        return (
+            <div className="thank">
+                <li>Thank you</li>
+            </div>
+        );
+    }
+}
+
+class Yes extends React.Component {
+    render() {
+        return (
+            <div> className="yes"
+                <li>Yes</li>
+            </div>
+        );
+    }
+}
 class Footer extends React.Component {
     render() {
         return (
@@ -93,6 +95,7 @@ class Footer extends React.Component {
         );
     }
 }
+
 class ApiApp extends Component {
     state = {
         languageCodes: [],
@@ -105,10 +108,25 @@ class ApiApp extends Component {
             : "Translator",
         statement1: cookie.load({Statement1})
             ? cookie.load({Statement1})
-            : "Common Sample Phrases:",
+            : "Common Phrases:",
         hello: cookie.load({Hello})
             ? cookie.load({Hello})
             : "Hello, my name is...",
+        yourname: cookie.load({YourName})
+            ? cookie.load({YourName})
+            : "What is your name?",
+        wellness: cookie.load({HowAre})
+            ? cookie.load({HowAre})
+            : "How are you?",
+        bathroom: cookie.load({Bathroom})
+            ? cookie.load({Bathroom})
+            : "Where is the bathroom?",
+        thank: cookie.load({Thank})
+            ? cookie.load({Thank})
+            : "Thank you",
+        yes: cookie.load({Yes})
+            ? cookie.load({Yes})
+            : "Yes",
     };
 
     componentDidMount() {
@@ -125,7 +143,18 @@ class ApiApp extends Component {
     }
 
     render() {
-        const { languageCodes, language, question, head, statement1, hello} = this.state;
+        const { languageCodes, 
+                language, 
+                question, 
+                head, 
+                statement1, 
+                hello, 
+                yourname,
+                wellness,
+                bathroom,
+                thank,
+                yes,
+                } = this.state;
 
         return (
             <div>
@@ -147,15 +176,25 @@ class ApiApp extends Component {
                             ))}
                         </select>
                     </div>
-                    <UserInput />
                     {statement1}
-                    <ul><li>{hello}</li></ul>
+                    <ul><li>{hello}</li>
+                        <li>{yourname}</li>
+                        <li>{wellness}</li>
+                        <li>{bathroom}</li>
+                        <li>{thank}</li>
+                        <li>{yes}</li>
+                    </ul>
                     <Footer />
             </div>
         );
     }
 
     changeHandler = language => {
+        let { yes } = this.state;
+        let { thank } = this.state;
+        let { bathroom } = this.state;
+        let { wellness } = this.state;
+        let { yourname } = this.state;
         let { hello } = this.state;
         let { statement1 } = this.state;
         let { head } = this.state;
@@ -165,7 +204,30 @@ class ApiApp extends Component {
         let transHead= "";
         let transState1="";
         let transHello="";
+        let transName = "";
+        let transWell= "";
+        let transBath= "";
+        let transThank= "";
+        let transYes= "";
 
+        const thankTranslating= transThank => {
+            if(thank !== transThank) {
+                this.setState({thank: transThank});
+                cookie.save("thank", transThank, {path: "/"});
+            }
+        };
+        const bathTranslating = transBath => {
+            if(bathroom !== transBath) {
+                this.setState({bathroom: transBath});
+                cookie.save("bathroom", transBath, {path: "/"});
+            }
+        };
+        const wellTranslating = transWell => {
+            if(wellness !== transWell) {
+                this.setState({ wellness: transWell });
+                cookie.save("wellness", transWell, {path:"/"});
+            }
+        };
         const headTranslating = transHead => {
             if(head !==transHead) {
                 this.setState({ head: transHead});
@@ -190,8 +252,50 @@ class ApiApp extends Component {
                 cookie.save("hello", transHello, {path: "/"});
             }
         };
+        const nameTranslating = transName => {
+            if (yourname !== transName) {
+                this.setState({yourname: transName});
+                cookie.save("yourname", transName, {path:"/"});
+            }
+        };
+        const yesTranslating = transYes => {
+            if (yes !== transYes) {
+                this.setState({yes: transYes});
+                cookie.save("yes", transYes, {path:"/"});
+            }
+        };
 
         // translate the question when selecting a different language
+        if (language !==  cookieLanguage) {
+            googleTranslate.translate(yes, language, function (err, translation) {
+                transYes = translation.translatedText;
+                yesTranslating(transYes);
+            });
+        }
+        if (language !== cookieLanguage) {
+            googleTranslate.translate(thank, language, function (err, translation) {
+                transThank = translation.translatedText;
+                thankTranslating(transThank);
+            });
+        }
+        if (language !== cookieLanguage) {
+            googleTranslate.translate(bathroom, language, function (err, translation) {
+                transBath = translation.translatedText;
+                bathTranslating(transBath);
+            }); 
+        }
+        if (language !== cookieLanguage) {
+            googleTranslate.translate(wellness, language, function (err, translation) {
+                transWell = translation.translatedText;
+                wellTranslating(transWell);
+            });
+        }
+        if (language !==cookieLanguage) {
+            googleTranslate.translate(yourname, language, function (err, translation) {
+                transName = translation.translatedText;
+                nameTranslating(transName);
+            });
+        }
         if (language !== cookieLanguage) {
             googleTranslate.translate(head, language, function (err, translation) {
                 transHead = translation.translatedText;
