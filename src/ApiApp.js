@@ -4,42 +4,42 @@ import cookie from "react-cookies";
 import { googleTranslate } from "./utils/googleTranslate";
 import './ApiApp.css';
 import Image from "./images/lang.png"
+import axios from 'axios';
 
 // classes for css editing and refrencing for translated text
 
-
-
-class TranslateForm extends React.Component {
-
+class TranslateForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { translator: '' };
+        this.state = {
+            value: '',
+            translated: '...'
+        }
+        this.translate = this.translate.bind(this);
     }
-
-    handleChange = event => {
-        this.setState({ translator: event.target.value });
-    };
-    
-
+    translate() {
+        axios.post('', { q: this.state.value })
+            .then(data => {
+                this.setState({ translated: data.data.data.translations[0].translatedText })
+                console.log(data.data.data.translations[0].translatedText)
+            }).catch(err => {
+                console.log('error')
+            })
+    }
     render() {
         return (
-            <React.Fragment>
-                <form>
-                    <label htmlFor="translator">Translator</label>
-                    <input
-                        placeholder="Enter English"
-                        type="text"
-                        name="translator"
-                        value={this.state.translator}
-                        onChange={this.handleChange}
-                    />
-                </form>
-
-                <h3>Your Translation is: {this.state.translator}</h3>
-            </React.Fragment>
+            <div>
+                <input
+                    value={this.state.value}
+                    onChange={(e) => this.setState({ value: e.target.value })}
+                    type="text" />
+                <button onClick={this.translate}>Submit</button>
+                <h1>{this.state.translated}</h1>
+            </div>
         );
     }
 }
+
 class Header extends React.Component {
     render() {
         return (
@@ -154,7 +154,7 @@ class Footer extends React.Component {
         return (
             <div className="footer">
                 <footer>Translator App,
-                    <a href="https://www.linkedin.com/in/veronica-kemp-5748b2196/" target="_blank"> Veronica Kemp </a>
+                    <a href="https://www.linkedin.com/in/veronica-kemp-5748b2196/" target="_blank" rel="noopener noreferrer"> Veronica Kemp </a>
                     2020</footer>
             </div>
         );
@@ -231,54 +231,54 @@ class ApiApp extends Component {
 
         return (
             <div>
-                    <div className="head">
-                        {head}
-                    </div>
-                    <div className="salut">
-                        <img src={Image} alt="Hello in different languages"></img>
-                    </div>
-                    <div style={this.transStyle}>
-                        <p>{question}</p>
-                        {/* iterate through language options to create a select box */}
-                        <select
-                            className="select-language"
-                            value={language}
-                            onChange={e => this.changeHandler(e.target.value)}
-                        >
-                            {languageCodes.map(lang => (
-                                <option key={lang.language} value={lang.language}>
-                                    {lang.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <TranslateForm />
-                    </div>
-                        <div className="untranslated">
-                        English Common Phrases:
+                <div className="head">
+                    {head}
+                </div>
+                <div className="salut">
+                    <img src={Image} alt="Hello in different languages"></img>
+                </div>
+                <div style={this.transStyle}>
+                    <p>{question}</p>
+                    {/* iterate through language options to create a select box */}
+                    <select
+                        className="select-language"
+                        value={language}
+                        onChange={e => this.changeHandler(e.target.value)}
+                    >
+                        {languageCodes.map(lang => (
+                            <option key={lang.language} value={lang.language}>
+                                {lang.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <TranslateForm />
+                </div>
+                <div className="untranslated">
+                    English Common Phrases:
                             <ul>
-                            <li>Hello, my name is...</li>
-                            <li>What is your name?</li>
-                            <li>How are you?</li>
-                            <li>Where is the bathroom?</li>
-                            <li>Thank you</li>
-                            <li>Yes</li>
-                            <li>No</li>
-                            <li>I do not understand</li>
-                            </ul>
-                            {statement1}
-                            <ul><li>{hello}</li>
-                                <li>{yourname}</li>
-                                <li>{wellness}</li>
-                                <li>{bathroom}</li>
-                                <li>{thank}</li>
-                                <li>{yes}</li>
-                                <li>{no}</li>
-                                <li>{understand}</li>
-                            </ul>
-                        </div>
-                    <Footer />
+                        <li>Hello, my name is...</li>
+                        <li>What is your name?</li>
+                        <li>How are you?</li>
+                        <li>Where is the bathroom?</li>
+                        <li>Thank you</li>
+                        <li>Yes</li>
+                        <li>No</li>
+                        <li>I do not understand</li>
+                    </ul>
+                    {statement1}
+                    <ul><li>{hello}</li>
+                        <li>{yourname}</li>
+                        <li>{wellness}</li>
+                        <li>{bathroom}</li>
+                        <li>{thank}</li>
+                        <li>{yes}</li>
+                        <li>{no}</li>
+                        <li>{understand}</li>
+                    </ul>
+                </div>
+                <Footer />
             </div>
         );
     }
