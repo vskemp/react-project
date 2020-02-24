@@ -7,19 +7,23 @@ import Image from "./images/lang.png"
 import axios from 'axios';
 
 // classes for css editing and refrencing for translated text
+// axios.post('https://translation.googleapis.com/v3/projects/western-dolphin-268714:translateText', { q: this.state.value })
 
 class TranslateForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             value: '',
-            translated: '...'
+            translated: '',
         }
         this.translate = this.translate.bind(this);
     }
     translate() {
-        axios.post('', { q: this.state.value })
+        console.log(this.state.value);
+        // API KEY PURPOSELY LEFT OUT UNTIL DEPLOYMENT WITH BACKEND TO KEEP KEY SECURE. IF YOU WOULD LIKE TO RUN THIS, PLEASE GENERATE YOUR OWN API KEY ON GOOGLE
+        axios.get(`https://translation.googleapis.com/language/translate/v2?target=${cookie.load("language")}&key==${this.state.value}`)
             .then(data => {
+                console.log(data);
                 this.setState({ translated: data.data.data.translations[0].translatedText })
                 console.log(data.data.data.translations[0].translatedText)
             }).catch(err => {
@@ -30,15 +34,19 @@ class TranslateForm extends Component {
         return (
             <div>
                 <input
+                    placeholder="Enter English"
                     value={this.state.value}
                     onChange={(e) => this.setState({ value: e.target.value })}
                     type="text" />
                 <button onClick={this.translate}>Submit</button>
-                <h1>{this.state.translated}</h1>
+                <h1>Your Translation:{this.state.translated}</h1>
             </div>
         );
     }
 }
+
+
+
 
 class Header extends React.Component {
     render() {
@@ -153,7 +161,7 @@ class Footer extends React.Component {
     render() {
         return (
             <div className="footer">
-                <footer>Translator App,
+                <footer>
                     <a href="https://www.linkedin.com/in/veronica-kemp-5748b2196/" target="_blank" rel="noopener noreferrer"> Veronica Kemp </a>
                     2020</footer>
             </div>
@@ -209,7 +217,6 @@ class ApiApp extends Component {
 
         const getLanguageCodes = languageCodes => {
             this.setState({ languageCodes });
-            console.log(languageCodes);
         };
     }
 
@@ -256,8 +263,8 @@ class ApiApp extends Component {
                     <TranslateForm />
                 </div>
                 <div className="untranslated">
-                    English Common Phrases:
-                            <ul>
+                    <ul>
+                    <h2>English Common Phrases:</h2>
                         <li>Hello, my name is...</li>
                         <li>What is your name?</li>
                         <li>How are you?</li>
@@ -267,8 +274,9 @@ class ApiApp extends Component {
                         <li>No</li>
                         <li>I do not understand</li>
                     </ul>
-                    {statement1}
-                    <ul><li>{hello}</li>
+                    <ul>
+                        <h2>{statement1}</h2>
+                        <li>{hello}</li>
                         <li>{yourname}</li>
                         <li>{wellness}</li>
                         <li>{bathroom}</li>
